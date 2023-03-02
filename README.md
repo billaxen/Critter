@@ -201,7 +201,7 @@ This app uses many icons. You can find everything you'll need using react-icons.
 > You can use any collection, you're not limited to "Feather".
 
 ---
-
+***************************************
 ## Layout
 
 Create a `Sidebar` component. We'll need the cat logo shown in the top left, which we can move from `assets/logo.svg` (in the root directory of this workshop) to `src/assets/logo.svg`. Import it, and create links for all the navigation items in the sidebar, using React Router `<Link>`. For the `Profile` link, for now you can use a dummy profile ID (eg. `/profile/abc`).
