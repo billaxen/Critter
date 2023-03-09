@@ -6,7 +6,7 @@ import { Link } from "react-router-dom";
 import ActionButtons from "./ActionButtons";
 
 const Tweet = ({ tweet, handle }) => {
-  const { status, setStatus } = useContext(CurrentUserContext);
+  const { status, setStatus, currentUser } = useContext(CurrentUserContext);
 
   const tweetDate = new Date(tweet.timestamp).toLocaleDateString("en-US", {
     month: "short",
@@ -22,7 +22,7 @@ const Tweet = ({ tweet, handle }) => {
         />
         <div>
           <Name>
-            <ProfileLink to={`/profile/${handle}`}>
+            <ProfileLink to={`/${tweet.author.handle}`}>
               {tweet.author.displayName}
             </ProfileLink>
           </Name>{" "}

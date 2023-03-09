@@ -5,14 +5,18 @@ import { MapPin, Calendar } from "react-feather";
 
 import { CurrentUserContext } from "./CurrentUserContext";
 import Tweet from "./Tweet";
+import { useParams } from "react-router-dom";
 
 const Profile = () => {
   const [profile, setProfile] = useState(null);
   const [tweets, setTweets] = useState([]);
   const [isLoadingTweets, setIsLoadingTweets] = useState(false);
+  const [error, setError] = useState(null);
+  const {profileId}= useParams();
+  console.log(profileId);
 
   useEffect(() => {
-    fetch("/api/me/profile")
+    fetch(`/api/${profileId}/profile`)
       .then((response) => response.json())
       .then((data) => setProfile(data.profile))
       .catch((error) => console.log(error));
@@ -26,7 +30,12 @@ const Profile = () => {
         setTweets(data.tweetIds.map((id) => data.tweetsById[id]));
         setIsLoadingTweets(false);
       })
-      .catch((error) => console.error(error));
+      .catch((error) => {
+        console.error(error);
+        setIsLoadingTweets(false);
+        setTweets([]);
+        setError("Failed to load tweets.");
+      });
   };
 
   const handleTweetsClick = () => {

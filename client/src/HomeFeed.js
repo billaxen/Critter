@@ -7,7 +7,8 @@ import NewTweetInput from "./NewTweet";
 const HomeFeed = () => {
   const { status, setStatus } = useContext(CurrentUserContext);
   const [tweets, setTweets] = useState([]);
-
+  const[error, setError] = useState(false)
+  
   useEffect(() => {
     setStatus("loading");
     fetch("/api/me/home-feed")
@@ -16,7 +17,11 @@ const HomeFeed = () => {
         setTweets(data.tweetIds.map((id) => data.tweetsById[id]));
       })
       .then(setStatus("idle"))
-      .catch((error) => console.error(error));
+      .catch((error) => {
+        setError(true);
+        console.error(error);
+      })
+        ;
   }, []);
 
   const addTweet = (newTweet) => {
@@ -24,6 +29,7 @@ const HomeFeed = () => {
       method: "POST",
       headers: {
         "Content-Type": "application/json",
+        "Accept": "application/json",
       },
       body: JSON.stringify({
         status: newTweet,
@@ -31,25 +37,37 @@ const HomeFeed = () => {
     })
       .then((response) => response.json())
       .then((data) => {
-        setTweets([data, ...tweets]);
+        setTweets((prevTweets) => [data, ...prevTweets]);
       })
       .catch((error) => console.error(error));
   };
+  
 
-  return (
-    <HomePage>
-      <h1>HOME</h1>
-      <NewTweetInput addTweet={addTweet} />
-      <AllTweets>
-        {tweets.length &&
-          tweets.map((tweet) => (
-            <SingleTweet>
-              <Tweet key={tweet.id} tweet={tweet} />
-            </SingleTweet>
-          ))}
-      </AllTweets>
-    </HomePage>
-  );
+      return (
+      
+        // <>
+        // {error
+        // ? 
+        // <><div>error</div></>
+        // : <>     
+        <HomePage>
+        <h1>HOME</h1>
+        <NewTweetInput addTweet={addTweet} />
+        <AllTweets>
+          {tweets.length &&
+            tweets.map((tweet) => (
+              <SingleTweet>
+                <Tweet key={tweet.id} tweet={tweet} />
+              </SingleTweet>
+            ))}
+        </AllTweets>
+      </HomePage>
+      // </>
+        // }
+        // </>
+    )
+ 
+    
 };
 
 const SingleTweet = styled.div`

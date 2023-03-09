@@ -14,6 +14,8 @@ import LoadingSpin from "react-loading-spin";
 
 const App = () => {
   const { status, setStatus } = useContext(CurrentUserContext);
+  const [currentUser, setCurrentUser] = React.useState(null);
+  
   return (
     <BrowserRouter>
       <CurrentUserProvider>
