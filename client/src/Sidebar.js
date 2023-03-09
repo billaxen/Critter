@@ -3,32 +3,47 @@ import { Home, User, Bell, Bookmark } from "react-feather";
 import styled from "styled-components";
 import { COLORS } from "./constants";
 import { NavLink } from "react-router-dom";
+import { useContext} from "react";
+import { CurrentUserContext } from "./CurrentUserContext";
+import LoadingSpin from "react-loading-spin";
+
 
 const Sidebar = () => {
+  const { currentUser} = useContext(CurrentUserContext);
+  
   return (
-    <Menu>
-      <Link to="/">
-        <Home />
-        <p>Home</p>
-      </Link>
+    <>
+      {currentUser ? (
+        <>
+          <Menu>
+            <Link to="/">
+              <Home />
+              <p>Home</p>
+            </Link>
 
-      <Link to="/profile">
-        <User />
-        <p>Profile</p>
-      </Link>
+            <Link to={`/${currentUser.handle}`}>
+       
+              <User />
+              <p>Profile</p>
+            </Link>
 
-      <Link to="/notifications">
-        <Bell />
-        <p>Notifications</p>
-      </Link>
+            <Link to="/notifications">
+              <Bell />
+              <p>Notifications</p>
+            </Link>
 
-      <Link to="/bookmarks">
-        <Bookmark />
-        <p>Bookmarks</p>
-      </Link>
+            <Link to="/bookmarks">
+              <Bookmark />
+              <p>Bookmarks</p>
+            </Link>
 
-      <MeowButton> Meow</MeowButton>
-    </Menu>
+            <MeowButton> Meow</MeowButton>
+          </Menu>
+        </>
+      ) : (
+        <><LoadingSpin /></>
+      )}
+    </>
   );
 };
 

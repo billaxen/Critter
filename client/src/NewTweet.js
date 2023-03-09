@@ -1,11 +1,13 @@
-import { useState } from "react";
+import { useContext, useState } from "react";
 import styled from "styled-components";
+import { CurrentUserContext } from "./CurrentUserContext";
 
 const NewTweetInput = ({ addTweet }) => {
+  const { status, setStatus } = useContext(CurrentUserContext);
   const [value, setValue] = useState("");
   const remainingChars = 200 - value.length;
   const warning = remainingChars <= 55 && remainingChars >= 0;
-  const exceeded = remainingChars < 0 || remainingChars===200 ;
+  const exceeded = remainingChars < 0 || remainingChars === 200;
 
   const handleChange = (event) => {
     setValue(event.target.value);
@@ -13,7 +15,7 @@ const NewTweetInput = ({ addTweet }) => {
 
   const handleSubmit = (event) => {
     event.preventDefault();
-    if (remainingChars >= 0 && remainingChars<200) {
+    if (remainingChars >= 0 && remainingChars < 200) {
       // Submit the tweet
       console.log(`Submitting tweet: ${value}`);
       addTweet(value);

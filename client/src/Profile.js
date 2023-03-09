@@ -12,8 +12,7 @@ const Profile = () => {
   const [tweets, setTweets] = useState([]);
   const [isLoadingTweets, setIsLoadingTweets] = useState(false);
   const [error, setError] = useState(null);
-  const {profileId}= useParams();
-  console.log(profileId);
+  const { profileId } = useParams();
 
   useEffect(() => {
     fetch(`/api/${profileId}/profile`)
@@ -21,26 +20,22 @@ const Profile = () => {
       .then((data) => setProfile(data.profile))
       .catch((error) => console.log(error));
   }, []);
-
-  const fetchTweets = () => {
-    setIsLoadingTweets(true);
-    fetch(`/api/${profile.handle}/feed`)
-      .then((response) => response.json())
-      .then((data) => {
-        setTweets(data.tweetIds.map((id) => data.tweetsById[id]));
-        setIsLoadingTweets(false);
-      })
-      .catch((error) => {
-        console.error(error);
-        setIsLoadingTweets(false);
-        setTweets([]);
-        setError("Failed to load tweets.");
-      });
-  };
-
-  const handleTweetsClick = () => {
-    fetchTweets();
-  };
+  console.log(profile);
+  useEffect(() => {
+    if (profile) {
+      fetch(`/api/${profile.handle}/feed`)
+        .then((response) => response.json())
+        .then((data) => {
+          setTweets(data.tweetIds.map((id) => data.tweetsById[id]));
+          setIsLoadingTweets(false);
+        })
+        .catch((error) => {
+          console.error(error);
+          setIsLoadingTweets(false);
+          setTweets([]);
+        });
+    }
+  }, [profile]);
 
   if (!profile) {
     return (
@@ -68,17 +63,16 @@ const Profile = () => {
         <p>
           {profile.numFollowing} Following {profile.numFollowers} Followers{" "}
         </p>
-        <ProfileButton onClick={handleTweetsClick}>Tweets</ProfileButton>
+        <ProfileButton>Tweets</ProfileButton>
         <ProfileButton>Media</ProfileButton>
         <ProfileButton>Likes</ProfileButton>
       </ProfileInfo>
-      {isLoadingTweets && <div>Loading tweets...</div>}
-      {!isLoadingTweets &&
-        tweets.map((tweet) => (
-          <SingleTweet key={tweet.id}>
-            <Tweet tweet={tweet} />
-          </SingleTweet>
-        ))}
+
+      {tweets.map((tweet) => (
+        <SingleTweet key={tweet.id}>
+          <Tweet tweet={tweet} />
+        </SingleTweet>
+      ))}
     </ProfilePage>
   );
 };

@@ -355,7 +355,7 @@ The POST /api/tweet endpoint is the one used for creating new tweets. You'll wan
 
 ```diff
 - const FAILURE_ODDS = 0.05
-+ const FAILURE_ODDS = 1
++ const FAILURE_ODDS = 0.05
 ```
 
 This way you'll get an error every time, which can be helpful when developing.

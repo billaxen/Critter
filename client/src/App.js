@@ -11,11 +11,19 @@ import { CurrentUserContext, CurrentUserProvider } from "./CurrentUserContext";
 import { useContext } from "react";
 import styled from "styled-components";
 import LoadingSpin from "react-loading-spin";
+import { Link } from "react-router-dom";
 
 const App = () => {
   const { status, setStatus } = useContext(CurrentUserContext);
   const [currentUser, setCurrentUser] = React.useState(null);
-  
+
+  React.useEffect(() => {
+    fetch("/api/me/profile")
+      .then((res) => res.json())
+      .then((data) => setCurrentUser(data.profile))
+      .catch((err) => setStatus("error"));
+  }, []);
+
   return (
     <BrowserRouter>
       <CurrentUserProvider>
@@ -33,12 +41,25 @@ const App = () => {
             )}
             {status === "idle" && (
               <Routes>
-                <Route path="/" element={<HomeFeed />} />
+                <Route
+                  path="/"
+                  element={<HomeFeed currentUser={currentUser} />}
+                />
                 <Route path="/notifications" element={<Notifications />} />
                 <Route path="/bookmarks" element={<Bookmarks />} />
                 <Route path="/tweet/:tweetId" element={<TweetDetails />} />
                 <Route path="/:profileId" element={<Profile />} />
               </Routes>
+            )}
+            {status === "error" && (
+              <ErrorMessage>
+                <p>An unknown error has occurred.</p>
+
+                <p>
+                  Please try refreshing the page, or
+                  <Link to="#"> contact support </Link> if the problem persists.
+                </p>
+              </ErrorMessage>
             )}
           </Center>
         </Page>
@@ -59,6 +80,11 @@ const Page = styled.div`
 `;
 const Spin = styled.div`
   justify-content: center;
+`;
+
+const ErrorMessage = styled.div`
+  color: black;
+  text-align: center;
 `;
 
 export default App;
