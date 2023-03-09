@@ -11,8 +11,12 @@
   "license": "ISC",
   "dependencies": {
     "body-parser": "^1.19.0",
+    "date-fns": "^2.29.3",
     "express": "^4.17.1",
-    "lodash": "^4.17.15"
+    "feather-icons": "^4.29.0",
+    "lodash": "^4.17.15",
+    "react-feather": "^2.0.10",
+    "react-loading-spin": "^2.1.9"
   },
   "devDependencies": {
     "nodemon": "^2.0.2"
