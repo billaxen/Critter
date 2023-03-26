@@ -7,15 +7,10 @@ import ActionButtons from "./ActionButtons";
 import LoadingSpin from "react-loading-spin";
 
 
-const TweetDetails = () => {
+const TweetDetails = ({}) => {
   const { status, setStatus } = useContext(CurrentUserContext);
   const [tweetDate, setTweetDate]= useState(null)
-  
   const[tweet, setTweet]= useState(null)
-  console.log(status);
-  console.log(tweet)
-  
-
   const {tweetId}= useParams();
 
 
@@ -69,7 +64,8 @@ const TweetDetails = () => {
             )}
           </div>
         ))}
-      <ActionButtons />
+        
+        {tweet && <ActionButtons tweet={tweet.tweet} />}
     </Section>
             </>
             : <><LoadingSpin /></>
@@ -111,6 +107,7 @@ const Section = styled.div`
   padding: 20px;
   box-shadow: 1px 1px 1px 1px gray;
   text-decoration: none;
+  width: 60%;
 `;
 
 const ProfileLink = styled(Link)`

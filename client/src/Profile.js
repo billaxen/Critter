@@ -19,7 +19,7 @@ const Profile = () => {
       .then((response) => response.json())
       .then((data) => setProfile(data.profile))
       .catch((error) => console.log(error));
-  }, []);
+  }, [profileId]);
   console.log(profile);
   useEffect(() => {
     if (profile) {
@@ -63,9 +63,12 @@ const Profile = () => {
         <p>
           {profile.numFollowing} Following {profile.numFollowers} Followers{" "}
         </p>
-        <ProfileButton>Tweets</ProfileButton>
+        <ProfileButtons>
+        <TweetButton>Tweets</TweetButton>
         <ProfileButton>Media</ProfileButton>
         <ProfileButton>Likes</ProfileButton>
+
+        </ProfileButtons>
       </ProfileInfo>
 
       {tweets.map((tweet) => (
@@ -120,7 +123,9 @@ const ProfileInfo = styled.div`
   margin-top: 75px;
 `;
 
-const ProfileButtons = styled.div``;
+const ProfileButtons = styled.div`
+display: flex;
+`;
 
 const ProfileButton = styled.button`
   width: 26vh;
@@ -129,5 +134,13 @@ const ProfileButton = styled.button`
 const SingleTweet = styled.div`
   margin: 10px;
 `;
+
+const TweetButton = styled.div`
+width: 26vh;
+background-color: darkgray;
+align-items: center;
+justify-content: center;
+text-align: center;
+`
 
 export default Profile;

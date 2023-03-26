@@ -12,6 +12,7 @@ import { useContext } from "react";
 import styled from "styled-components";
 import LoadingSpin from "react-loading-spin";
 import { Link } from "react-router-dom";
+import ErrorMessage from "./errorMessage";
 
 const App = () => {
   const { status, setStatus } = useContext(CurrentUserContext);
@@ -49,18 +50,9 @@ const App = () => {
                 <Route path="/bookmarks" element={<Bookmarks />} />
                 <Route path="/tweet/:tweetId" element={<TweetDetails />} />
                 <Route path="/:profileId" element={<Profile />} />
-              </Routes>
+                </Routes>
             )}
-            {status === "error" && (
-              <ErrorMessage>
-                <p>An unknown error has occurred.</p>
-
-                <p>
-                  Please try refreshing the page, or
-                  <Link to="#"> contact support </Link> if the problem persists.
-                </p>
-              </ErrorMessage>
-            )}
+            {status === "error" && <ErrorMessage />}
           </Center>
         </Page>
       </CurrentUserProvider>
@@ -82,9 +74,5 @@ const Spin = styled.div`
   justify-content: center;
 `;
 
-const ErrorMessage = styled.div`
-  color: black;
-  text-align: center;
-`;
 
 export default App;

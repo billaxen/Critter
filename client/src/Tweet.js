@@ -42,7 +42,13 @@ const Tweet = ({ tweet }) => {
                 {tweet.author.displayName}
               </ProfileLink>
             </Name>{" "}
-            @{tweet.author.handle} - {tweetDate}
+            <Link
+              to={`/${tweet.author.handle}`}
+              onClick={handleProfileLinkClick}
+            >
+              @{tweet.author.handle}
+            </Link>
+            - {tweetDate}
             <Status>{tweet.status}</Status>
           </div>
         </TweetAuthor>
@@ -56,7 +62,7 @@ const Tweet = ({ tweet }) => {
           ))}
       </TweetLink>
       <ActionButtonsWrapper onClick={handleActionButtonClick}>
-        <ActionButtons />
+        <ActionButtons tweet={tweet} />
       </ActionButtonsWrapper>
     </Section>
   );

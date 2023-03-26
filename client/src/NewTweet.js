@@ -16,8 +16,7 @@ const NewTweetInput = ({ addTweet }) => {
   const handleSubmit = (event) => {
     event.preventDefault();
     if (remainingChars >= 0 && remainingChars < 200) {
-      // Submit the tweet
-      console.log(`Submitting tweet: ${value}`);
+
       addTweet(value);
       setValue("");
     }

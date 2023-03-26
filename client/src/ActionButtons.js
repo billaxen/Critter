@@ -1,36 +1,61 @@
-import { useState } from 'react';
-import { Heart, Share, MessageCircle, Repeat } from 'react-feather';
-import styled from 'styled-components';
+import React, { useState } from "react";
+import styled from "styled-components";
+import { Heart, MessageCircle, RefreshCcw, Share } from "react-feather";
 
-const TweetButtons = () => {
+const ActionButtons = ({ tweet }) => {
   const [isLiked, setIsLiked] = useState(false);
+  const [numLikes, setNumLikes] = useState(tweet.numLikes);
 
   const handleLikeClick = () => {
     setIsLiked(!isLiked);
-  }
+    if (isLiked) {
+      setNumLikes(numLikes - 1);
+    } else {
+      setNumLikes(numLikes + 1);
+    }
+  };
 
   return (
     <Buttons>
-      <Button><MessageCircle/></Button>
-      <Button><Repeat/></Button>
       <Button onClick={handleLikeClick}>
-        <Heart color={isLiked ? 'red' : 'black'} fill={isLiked ? 'red' : 'none'} />
+        {isLiked ? (
+          <HeartFill color="red" />
+        ) : (
+          <Heart color="black" />
+        )}
+        {numLikes > 0 && <LikeCount>{numLikes}</LikeCount>}
       </Button>
-      <Button><Share/></Button>
+      <Button>
+        <MessageCircle color="black" />
+      </Button>
+      <Button>
+        <RefreshCcw color="black" />
+      </Button>
+      <Share/>
     </Buttons>
-  )
-}
+  );
+};
 
 const Buttons = styled.div`
-  max-width: 50%;
   display: flex;
-  justify-content: space-evenly;
-  margin-top: 10px;
+  justify-content: space-between;
 `;
 
 const Button = styled.button`
+  display: flex;
+  align-items: center;
+  gap: 5px;
   border: none;
-  background-color: white;
+  background-color: transparent;
+  cursor: pointer;
 `;
 
-export default TweetButtons;
+const HeartFill = styled(Heart)`
+  fill: red;
+`;
+
+const LikeCount = styled.span`
+  margin-left: 5px;
+`;
+
+export default ActionButtons;

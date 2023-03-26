@@ -19,7 +19,7 @@ const HomeFeed = () => {
       .then(setStatus("idle"))
       .catch((error) => {
         setError(true);
-        console.error(error);
+
       });
   }, [status]);
 
@@ -37,10 +37,18 @@ const HomeFeed = () => {
     })
       .then((response) => response.json())
       .then((data) => {
-        console.log(data);
-        setTweets((prevTweets) => [data.tweet, ...prevTweets]);
 
-        setStatus("idle");
+        fetch("/api/me/home-feed")
+      .then((response) => response.json())
+      .then((data) => {
+        setTweets(data.tweetIds.map((id) => data.tweetsById[id]));
+      })
+      .then(setStatus("idle"))
+      .catch((error) => {
+        setError(true);
+
+      });
+ 
       })
       .catch((error) => console.error(error));
   };
@@ -52,7 +60,7 @@ const HomeFeed = () => {
       <AllTweets>
         {status === "idle" &&
           tweets.map((tweet) => {
-            console.log(tweet);
+
             return (
               <SingleTweet>
                 <Tweet key={tweet.id} tweet={tweet} />
