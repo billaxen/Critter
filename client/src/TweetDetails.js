@@ -5,13 +5,14 @@ import styled from "styled-components";
 import { Link } from "react-router-dom";
 import ActionButtons from "./ActionButtons";
 import LoadingSpin from "react-loading-spin";
-
+import ErrorMessage from "./errorMessage";
 
 const TweetDetails = ({}) => {
   const { status, setStatus } = useContext(CurrentUserContext);
   const [tweetDate, setTweetDate]= useState(null)
   const[tweet, setTweet]= useState(null)
   const {tweetId}= useParams();
+  const [error, setError] = useState(null);
 
 
   useEffect(() => {
@@ -22,62 +23,59 @@ const TweetDetails = ({}) => {
       )
 
       .catch((error) => {
-        console.error(error);
+        setError(error.message);
       })
         
   }, []);
 
 
 
-    return (
-      <>
-            {tweet 
-            ? 
-            <>
-         <Section>
-      <TweetAuthor>
-        <AvatarPic
-          src={tweet.tweet.author.avatarSrc}
-          alt={tweet.tweet.author.displayName}
-        />
-        <div>
-          <Name>
-            <ProfileLink to={`/${tweet.tweet.author.handle}`}>
-              {tweet.tweet.author.displayName}
-            </ProfileLink>
-          </Name>{" "}
-          @{tweet.tweet.author.handle}
-           - {new Date(tweet.tweet.timestamp).toLocaleDateString("en-US", {
-      month: "short",
-      day: "numeric",
-    })}
-          <Status>{tweet.tweet.status}</Status>
-        </div>
-      </TweetAuthor>
-      {tweet.tweet.media &&
-        tweet.tweet.media.map((mediaItem, index) => (
-          <div key={index}>
-            {mediaItem.type === "img" && (
-              <Link to= {`/tweet/${tweet.tweet.id}`}>
-                <Pic src={mediaItem.url} alt="tweet media" />
-                </Link>
-            )}
-          </div>
-        ))}
-        
-        {tweet && <ActionButtons tweet={tweet.tweet} />}
-    </Section>
-            </>
-            : <><LoadingSpin /></>
-            }
-            </>
-    
-    )
-    
-    
+  return (
+    <>
+      {error && <div><ErrorMessage/></div>}
+      {tweet ? (
+        <Section>
+          <TweetAuthor>
+            <AvatarPic
+              src={tweet.tweet.author.avatarSrc}
+              alt={tweet.tweet.author.displayName}
+            />
+            <div>
+              <Name>
+                <ProfileLink to={`/${tweet.tweet.author.handle}`}>
+                  {tweet.tweet.author.displayName}
+                </ProfileLink>
+              </Name>{" "}
+              @{tweet.tweet.author.handle}
+              -{" "}
+              {new Date(tweet.tweet.timestamp).toLocaleDateString("en-US", {
+                month: "short",
+                day: "numeric",
+              })}
+              <Status>{tweet.tweet.status}</Status>
+            </div>
+          </TweetAuthor>
+          {tweet.tweet.media &&
+            tweet.tweet.media.map((mediaItem, index) => (
+              <div key={index}>
+                {mediaItem.type === "img" && (
+                  <Link to={`/tweet/${tweet.tweet.id}`}>
+                    <Pic src={mediaItem.url} alt="tweet media" />
+                  </Link>
+                )}
+              </div>
+            ))}
 
-  };
-  const Pic = styled.img`
+          {tweet && <ActionButtons tweet={tweet.tweet} />}
+        </Section>
+      ) : (
+        <LoadingSpin />
+      )}
+    </>
+  );
+};
+
+const Pic = styled.img`
   max-width: 100%;
   border-radius: 20px;
 `;
@@ -118,4 +116,4 @@ const ProfileLink = styled(Link)`
   }
 `;
 
-  export default TweetDetails 
+export default TweetDetails;

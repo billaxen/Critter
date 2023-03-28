@@ -11,7 +11,6 @@ import { CurrentUserContext, CurrentUserProvider } from "./CurrentUserContext";
 import { useContext } from "react";
 import styled from "styled-components";
 import LoadingSpin from "react-loading-spin";
-import { Link } from "react-router-dom";
 import ErrorMessage from "./errorMessage";
 
 const App = () => {

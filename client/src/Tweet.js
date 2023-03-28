@@ -1,24 +1,21 @@
-import React, { useContext } from "react";
-import { CurrentUserContext } from "./CurrentUserContext";
+import React from "react";
 import styled from "styled-components";
+import { useNavigate } from "react-router-dom";
+import ActionButtons from "./ActionButtons";
 import { Link } from "react-router-dom";
 
-import ActionButtons from "./ActionButtons";
-
 const Tweet = ({ tweet }) => {
-  const { status, setStatus, currentUser } = useContext(CurrentUserContext);
-
+  
   const tweetDate = new Date(tweet.timestamp).toLocaleDateString("en-US", {
     month: "short",
     day: "numeric",
   });
 
+  const navigate = useNavigate();
+
   const handleProfileLinkClick = (e) => {
     e.stopPropagation();
-  };
-
-  const handleTweetClick = () => {
-    console.log("Tweet clicked");
+    navigate(`/${tweet.author.handle}`);
   };
 
   const handleActionButtonClick = (e) => {
@@ -35,19 +32,11 @@ const Tweet = ({ tweet }) => {
           />
           <div>
             <Name>
-              <ProfileLink
-                to={`/${tweet.author.handle}`}
-                onClick={handleProfileLinkClick}
-              >
+              <ProfileLink onClick={handleProfileLinkClick}>
                 {tweet.author.displayName}
               </ProfileLink>
             </Name>{" "}
-            <Link
-              to={`/${tweet.author.handle}`}
-              onClick={handleProfileLinkClick}
-            >
-              @{tweet.author.handle}
-            </Link>
+            <span onClick={handleProfileLinkClick}>@{tweet.author.handle}</span>{" "}
             - {tweetDate}
             <Status>{tweet.status}</Status>
           </div>
@@ -100,9 +89,10 @@ const Section = styled.div`
   cursor: pointer;
 `;
 
-const ProfileLink = styled(Link)`
+const ProfileLink = styled.span`
   color: black;
   text-decoration: none;
+  cursor: pointer;
   &:hover {
     text-decoration: underline;
   }

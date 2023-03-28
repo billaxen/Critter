@@ -3,9 +3,10 @@ import styled from "styled-components";
 import LoadingSpin from "react-loading-spin";
 import { MapPin, Calendar } from "react-feather";
 
-import { CurrentUserContext } from "./CurrentUserContext";
+
 import Tweet from "./Tweet";
 import { useParams } from "react-router-dom";
+import ErrorMessage from "./errorMessage";
 
 const Profile = () => {
   const [profile, setProfile] = useState(null);
@@ -18,9 +19,10 @@ const Profile = () => {
     fetch(`/api/${profileId}/profile`)
       .then((response) => response.json())
       .then((data) => setProfile(data.profile))
-      .catch((error) => console.log(error));
+      .catch((error) => setError(error.message));
   }, [profileId]);
   console.log(profile);
+  
   useEffect(() => {
     if (profile) {
       fetch(`/api/${profile.handle}/feed`)
@@ -33,6 +35,7 @@ const Profile = () => {
           console.error(error);
           setIsLoadingTweets(false);
           setTweets([]);
+          setError(error.message);
         });
     }
   }, [profile]);
@@ -46,6 +49,9 @@ const Profile = () => {
   }
 
   return (
+    <div>
+      {error && <ErrorMessage/>}
+      {profile && (
     <ProfilePage>
       <Header>
         <Banner src={profile.bannerSrc} alt="treasurymog-banner" />
@@ -77,8 +83,10 @@ const Profile = () => {
         </SingleTweet>
       ))}
     </ProfilePage>
-  );
+  )}
+  </div>)
 };
+
 
 const ProfilePage = styled.div`
   margin-left: 20px;
